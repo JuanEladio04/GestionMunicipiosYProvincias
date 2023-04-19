@@ -159,10 +159,12 @@ public class mainWindow extends JFrame {
 		JButton saveButton = new JButton("Guardar");
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Municipio m = MunicipioController.findByDescription(municipioChooserComboBox.getSelectedItem().toString());
-				Provincia p = ProvinciaController.findByName(provinciaChooserComboBox.getSelectedItem().toString());
-				MunicipioController.realizeUpdate(m.getNombre(), p.getProvincia(), municipioNameTextField.getText());
-			}
+				Municipio m = (Municipio) municipioChooserComboBox.getSelectedItem();
+
+				Provincia p = (Provincia) provinciaChooserComboBox.getSelectedItem();
+				m.setProvincia (p);
+				m.setNombre(municipioNameTextField.getText());
+				MunicipioController.realizeUpdate(m);			}
 		});
 		GridBagConstraints gbc_saveButton = new GridBagConstraints();
 		gbc_saveButton.anchor = GridBagConstraints.EAST;
@@ -177,19 +179,17 @@ public class mainWindow extends JFrame {
 	private void setValuesToUpdateMenu(JButton selectButton) {
 		selectButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<Provincia> provinciaName = ProvinciaController.findAll();
-				municipioNameTextField.setText(municipioChooserComboBox.getSelectedItem().toString());
+				Municipio m = (Municipio) municipioChooserComboBox.getSelectedItem();
+				Provincia p = m.getProvincia();
+				List<Provincia> provinciaName = ProvinciaController.findById(p.getId());
 				
+				municipioNameTextField.setText(municipioChooserComboBox.getSelectedItem().toString());
 				if(provinciaChooserComboBox != null) {
 					provinciaChooserComboBox.removeAllItems();
 				}
 				for (Provincia provincia : provinciaName) {
-					provinciaChooserComboBox.addItem(provincia.getProvincia());
+					provinciaChooserComboBox.addItem(provincia);
 				}
-				
-				Municipio m = MunicipioController.findByDescription(municipioChooserComboBox.getSelectedItem().toString());
-				Provincia p = m.getProvincia();
-				provinciaChooserComboBox.setSelectedItem(p.getProvincia());
 				
 			}
 		});
@@ -219,7 +219,7 @@ public class mainWindow extends JFrame {
 			combo.removeAllItems();
 		}
 		for (Municipio m : list) {
-			combo.addItem(m.getNombre());
+			combo.addItem(m);
 		}
 		
 	}

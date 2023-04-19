@@ -45,7 +45,7 @@ public class MunicipioController {
 		EntityManager em = entityManagerFactory.createEntityManager();
 
 	    Query q = em.createNativeQuery("SELECT * FROM municipio where nombre LIKE ?", Municipio.class);
-	    q.setParameter(1,description);
+	    q.setParameter(1 ,description);
 
 	    m = (Municipio) q.getSingleResult();
 	    
@@ -59,23 +59,14 @@ public class MunicipioController {
 	/**
 	 * 
 	 */
-	public static void realizeUpdate (String municipioOldName, String newName, String newProvinciaName) {
+	public static void realizeUpdate (Municipio m) {
 		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("GestionMunicipiosYProvinciasDDBB");
 
-		EntityManager em = entityManagerFactory.createEntityManager();
-
-		TypedQuery<Municipio> q = em.createQuery("SELECT nombre FROM Municipio as m where m.nombre LIKE "+ "'" + municipioOldName + "'", Municipio.class);
-		
-		List<Municipio> municipios = q.getResultList();
+		EntityManager em = entityManagerFactory.createEntityManager();		
 		
 		em.getTransaction().begin();
-		for (Municipio m : municipios) {
-			m.setNombre(newName);
-			m.setProvincia(ProvinciaController.findByName(newProvinciaName));
-			em.persist(m);
-		}
+		em.merge(m);
 		em.getTransaction().commit();
-		
 		em.close();
 	}
 

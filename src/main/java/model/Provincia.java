@@ -14,6 +14,10 @@ import java.util.List;
 @NamedQuery(name="Provincia.findAll", query="SELECT p FROM Provincia p")
 public class Provincia implements Serializable {
 	private static final long serialVersionUID = 1L;
+	@Override
+	public String toString() {
+		return provincia;
+	}
 
 	@Id
 	private short id;

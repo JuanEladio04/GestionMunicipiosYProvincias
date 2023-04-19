@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -16,39 +17,18 @@ public class ProvinciaController {
 	
 	/**
 	 * 
-	 * @return
-	 */
-	public static List<Provincia> findAll() {
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("GestionMunicipiosYProvinciasDDBB");
-
-		EntityManager em = entityManagerFactory.createEntityManager();
-		
-		TypedQuery<Provincia> query = em.createNamedQuery("Provincia.findAll", Provincia.class);
-		List<Provincia> results = query.getResultList();
-
-		em.close();
-		return results;
-	}
-	
-	
-	/**
-	 * 
 	 * @param string
 	 */
-	public static Provincia findByName(String description) {
-		Provincia p = new Provincia ();
+	public static List<Provincia> findById(int id) {
 		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("GestionMunicipiosYProvinciasDDBB");
-
 		EntityManager em = entityManagerFactory.createEntityManager();
-
-	    Query q = em.createNativeQuery("SELECT * FROM municipio where nombre LIKE ?", Provincia.class);
-	    q.setParameter(1, description);
-
-	    p = (Provincia) q.getSingleResult();
-	    
-	    em.close();
-
-	    return p;
+		Query q = em.createNativeQuery("SELECT * FROM provincia order by id = ? desc;", Provincia.class);
+		q.setParameter(1, id);
+		
+		List<Provincia> p = (List<Provincia>) q.getResultList();
+		em.close();
+		return p;
+		
 		
 	}
 	

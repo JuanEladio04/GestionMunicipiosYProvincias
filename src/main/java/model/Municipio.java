@@ -12,6 +12,11 @@ import javax.persistence.*;
 @Table(name="municipio")
 @NamedQuery(name="Municipio.findAll", query="SELECT m FROM Municipio m")
 public class Municipio implements Serializable {
+	@Override
+	public String toString() {
+		return nombre;
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
